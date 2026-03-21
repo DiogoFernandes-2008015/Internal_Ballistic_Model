@@ -1,0 +1,26 @@
+ID_Grey_Balint_0.py -> Algoritmo de Evolução Diferencial para estimação dos parâmetros da lei de queima, covolume e parâmetro de forma.
+			Testado com dados simulados - OK! (R2 = 0.9999)
+			Testado com dados simulados com ruido - 
+
+
+ID_Grey_Balint_1.py -> Algoritmo de Evolução Diferencial para estimação dos parâmetros da lei de queima, covolume e parâmetro de forma e estimação da condição inicial
+			Testado com dados simulados com ruido - 
+
+ID_Grey_Balint_2.py -> Algoritmo de Evolução Diferencial para estimação dos parâmetros da lei de queima, covolume e parâmetro de forma e escalonamento dos parâmetros
+			Testado com dados simulados com ruido - 
+
+ID_Grey_Balint_3.py -> Algoritmo de Evolução Diferencial para estimação dos parâmetros da lei de queima, covolume e parâmetro de forma, escalonamento dos parâmetros e estimação da condição inicial
+			Testado com dados simulados com ruido - 
+
+ID_Grey_Balint_4.py -> Algoritmo L-BFGS-B para estimação dos parâmetros da lei de queima, covolume e parâmetro de forma e escalonamento dos parâmetros
+			Testado com dados simulados com ruido - 
+
+ID_Grey_Balint_5.py -> Algoritmo SLQSP para estimação dos parâmetros da lei de queima, covolume e parâmetro de forma e escalonamento dos parâmetros
+			Testado com dados simulados com ruido -
+
+ID_Grey_Balint_6.py -> Algoritmo L-BFGS-B para estimação dos parâmetros da lei de queima, covolume e parâmetro de forma e escalonamento dos parâmetros e estimação da condição inicial
+			Testado com dados simulados com ruido -
+
+ID_Grey_Balint_7.py -> Algoritmo SLQSP para estimação dos parâmetros da lei de queima, covolume e parâmetro de forma e escalonamento dos parâmetros e estimação da condição inicial
+			Testado com dados simulados com ruido -
+ 
