@@ -69,8 +69,7 @@ except FileNotFoundError:
     y = np.maximum(0, y)
 
 ##Adição de um ruido
-noise_level = 0.02
-std_deviation = noise_level * np.max(y)
+std_deviation = 130000
 
 # Gerar ruído com a mesma forma (shape) de y
 noise = np.random.normal(0, std_deviation, y.shape)
@@ -79,7 +78,7 @@ noise = np.random.normal(0, std_deviation, y.shape)
 y_noisy = y + noise
 
 # Opcional: Garantir que não existam pressões negativas (físicamente impossível)
-y = np.maximum(0, y_noisy)
+y = np.maximum(0, y_noisy)/(1e6)
 
 decimate = 1
 y = y[::decimate]
@@ -191,7 +190,7 @@ def create_loss_fn(t_array, y_array, static):
             num = C * static.Lambda - (static.gamma - 1) / 2.0 * m_eff * v_val ** 2
             P_m = jnp.maximum(0.0, num / jnp.maximum(V_g, 1e-9))
             P_b = P_m / (1 + C / (3.0 * static.m_proj))
-            return P_b * (1 + C / (2.0 * static.m_proj))
+            return P_b * (1 + C / (2.0 * static.m_proj))/(1e6)
 
         y_pred = jax.vmap(model_output_step)(sol.ys)
         return jnp.sum((y_pred - y_array) ** 2)
@@ -240,7 +239,7 @@ print("\nStatus da Otimização:", result.message)
 # ==========================================
 # 6. RESULTADOS E VALIDAÇÃO
 # ==========================================
-alpha_opt, beta_opt, b_opt, theta_opt, f0_opt = result.x
+alpha_opt, beta_opt, b_opt, theta_opt = result.x
 
 print("\n--- Parâmetros Identificados ---")
 print(f"Alpha = {alpha_opt:.6f}")
@@ -271,7 +270,7 @@ def model_output_step_final(x_step):
     num = C * static_params.Lambda - (static_params.gamma - 1) / 2.0 * m_eff * v_val ** 2
     P_m = jnp.maximum(0.0, num / jnp.maximum(V_g, 1e-9))
     P_b = P_m / (1 + C / (3.0 * static_params.m_proj))
-    return P_b * (1 + C / (2.0 * static_params.m_proj))
+    return P_b * (1 + C / (2.0 * static_params.m_proj))/(1e6)
 
 
 y_hat = jax.vmap(model_output_step_final)(final_sol.ys)

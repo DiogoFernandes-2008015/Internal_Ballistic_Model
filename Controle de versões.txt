@@ -1,4 +1,4 @@
-ID_Grey_Balint_0.py -> Algoritmo de Evolução Diferencial para estimação dos parâmetros da lei de queima, covolume e parâmetro de forma.
+ ID_Grey_Balint_0.py -> Algoritmo de Evolução Diferencial para estimação dos parâmetros da lei de queima, covolume e parâmetro de forma.
 			Testado com dados simulados - OK! (R2 = 0.9999)
 			Testado com dados simulados com ruido - 
 

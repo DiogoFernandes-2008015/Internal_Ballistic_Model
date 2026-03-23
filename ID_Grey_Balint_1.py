@@ -48,10 +48,10 @@ except IndexError:
 # Forçar uso de float64 para evitar perda de precisão na otimização
 jax.config.update("jax_enable_x64", True)
 
-simulation_name = "Balint_SingleShooting"
-date_time_now = datetime.datetime.now()
-timestamp = date_time_now.strftime("%Y-%m-%d_%H-%M-%S")
-file_name = f"results_{simulation_name}_{timestamp}.mat"
+simulation_name = "Balint_SingleShooting_mod1"
+#date_time_now = datetime.datetime.now()
+#timestamp = date_time_now.strftime("%Y-%m-%d_%H-%M-%S")
+file_name = f"results_{simulation_name}.mat"
 
 # ==========================================
 # 2. CARREGAMENTO DOS DADOS DE REFERÊNCIA
@@ -69,8 +69,7 @@ except FileNotFoundError:
     y = np.maximum(0, y)
 
 ##Adição de um ruido
-noise_level = 0.02
-std_deviation = noise_level * np.max(y)
+std_deviation = 130000
 
 # Gerar ruído com a mesma forma (shape) de y
 noise = np.random.normal(0, std_deviation, y.shape)
@@ -79,7 +78,7 @@ noise = np.random.normal(0, std_deviation, y.shape)
 y_noisy = y + noise
 
 # Opcional: Garantir que não existam pressões negativas (físicamente impossível)
-y = np.maximum(0, y_noisy)
+y = np.maximum(0, y_noisy)/(1e6)
 
 decimate = 1
 y = y[::decimate]
@@ -193,7 +192,7 @@ def create_loss_fn(t_array, y_array, static):
             num = C * static.Lambda - (static.gamma - 1) / 2.0 * m_eff * v_val ** 2
             P_m = jnp.maximum(0.0, num / jnp.maximum(V_g, 1e-9))
             P_b = P_m / (1 + C / (3.0 * static.m_proj))
-            return P_b * (1 + C / (2.0 * static.m_proj))
+            return P_b * (1 + C / (2.0 * static.m_proj))/(1e6)
 
         y_pred = jax.vmap(model_output_step)(sol.ys)
         return jnp.sum((y_pred - y_array) ** 2)
@@ -256,7 +255,7 @@ falar("Iniciando Simulação com dados de treinamento.")
 
 # Rodar o modelo uma última vez com os parâmetros ótimos para gerar os gráficos
 final_args = (alpha_opt, beta_opt, b_opt, theta_opt, static_params)
-x0_final = jnp.array([0.0, 0.0, 0.0001])
+x0_final = jnp.array([0.0, 0.0, f0_opt])
 final_sol = diffeqsolve(
     term, solver, t0=time[0], t1=time[-1], dt0=Ts,
     y0=x0_final, saveat=SaveAt(ts=t_shot_single), args=final_args
@@ -274,7 +273,7 @@ def model_output_step_final(x_step):
     num = C * static_params.Lambda - (static_params.gamma - 1) / 2.0 * m_eff * v_val ** 2
     P_m = jnp.maximum(0.0, num / jnp.maximum(V_g, 1e-9))
     P_b = P_m / (1 + C / (3.0 * static_params.m_proj))
-    return P_b * (1 + C / (2.0 * static_params.m_proj))
+    return P_b * (1 + C / (2.0 * static_params.m_proj))/(1e6)
 
 
 y_hat = jax.vmap(model_output_step_final)(final_sol.ys)
